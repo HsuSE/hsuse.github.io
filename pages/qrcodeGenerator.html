@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QRcode Generator</title>
+
+    <script src="https://code.jquery.com/jquery-3.6.1.slim.js" integrity="sha256-tXm+sa1uzsbFnbXt8GJqsgi2Tw+m4BLGDof6eUPjbtk=" crossorigin="anonymous"></script>
+
+    <script src="../js/qrcode.js"></script>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
+        crossorigin="anonymous"></script>
+
+    <script src="../js/qrcode_generator.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <style>
+        img {
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <label for="patient-name" class="form-label">Patient Name</label>
+        <div class="input-group mb-3">
+            <input type="text" id="patient-name" class="form-control" placeholder="Patient Name" aria-label="PatientName"
+                aria-describedby="basic-addon1">
+        </div>
+
+        <label for="medicine-name" class="form-label">Medicine Name</label>
+        <div class="input-group mb-3">
+            <input type="text" id="medicine-name" class="form-control" placeholder="Medicine Name" aria-label="MedicineName"
+                aria-describedby="basic-addon1">
+                <button id="btn-add" type="button" class="btn btn-primary" onclick="addMedicine()" disabled>ADD</button>
+        </div>
+
+        <label for="medicine-name" class="form-label">Medicine List</label>
+        <div style="border: 1px solid #ced4da; border-radius: 5px; min-height: 50px;">
+            <ul id="medicine-list" class="list-group">
+            </ul>
+        </div>
+
+        <div class="row p-3">
+            <button type="button" class="btn btn-primary" onclick="generate()">Generate</button>
+        </div>
+        <div class="row p-3">
+            <div id="qrcode"></div>
+        </div>
+    </div>
+</body>
+
+</html>
