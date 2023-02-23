@@ -1,6 +1,6 @@
 {
-    "version": "2.1.3",
+    "version": "2.2.0",
     "build": "1",
-    "isAudit": false,
-    "isEnforce": false
+    "isAudit": true,
+    "isEnforce": true
 }
