@@ -38,11 +38,30 @@
             <input type="text" id="patient-name" class="form-control" placeholder="Patient Name" aria-label="PatientName"
                 aria-describedby="basic-addon1">
         </div>
-
-        <label for="medicine-name" class="form-label">Medicine Name</label>
+        <hr>
+        <h3>Therapy</h3>
+        <label for="patient-name" class="form-label">Interval</label>
         <div class="input-group mb-3">
-            <input type="text" id="medicine-name" class="form-control" placeholder="Medicine Name" aria-label="MedicineName"
+            <input type="text" id="therapy-interval" class="form-control" placeholder="Interval" aria-label="Interval"
                 aria-describedby="basic-addon1">
+        </div>
+        <label for="patient-name" class="form-label">Times</label>
+        <div class="input-group mb-3">
+            <input type="text" id="therapy-times" class="form-control" placeholder="Times" aria-label="Times"
+                aria-describedby="basic-addon1">
+        </div>
+        <label for="patient-name" class="form-label">Total Medicine Package Amount</label>
+        <div class="input-group mb-3">
+            <input type="text" id="medicine-amount" class="form-control" placeholder="Aamount" aria-label="MedicineAmount"
+                aria-describedby="basic-addon1">
+        </div>
+
+        <hr>
+        <h3>Therapy Medicines</h3>
+        <div class="input-group mb-3">
+            <!-- <input type="text" id="medicine-name" class="form-control" placeholder="Medicine Name" aria-label="MedicineName"
+                aria-describedby="basic-addon1"> -->
+                <select class="form-select" name="medicine-info-selector"></select>
                 <button id="btn-add" type="button" class="btn btn-primary" onclick="addMedicine()" disabled>ADD</button>
         </div>
 
