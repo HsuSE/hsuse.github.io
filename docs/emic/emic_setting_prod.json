@@ -2,5 +2,6 @@
     "version": "2.4.0",
     "build": "1",
     "isAudit": true,
-    "isEnforce": true
+    "isEnforce": true,
+    "enableCache": true
 }
