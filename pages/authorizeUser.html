@@ -17,38 +17,117 @@
         integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3"
         crossorigin="anonymous"></script>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-modal/2.2.6/js/bootstrap-modalmanager.min.js" 
+        integrity="sha512-/HL24m2nmyI2+ccX+dSHphAHqLw60Oj5sK8jf59VWtFWZi9vx7jzoxbZmcBeeTeCUc7z1mTs3LfyXGuBU32t+w==" 
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
     <style>
         img {
             margin: auto;
         }
+
+        #loginForm {
+            padding-top: 20px;
+        }
+
+        #validateForm {
+            display: none;
+        }
+
+        .fade-in {
+            opacity: 1;
+            animation-name: fadeInOpacity;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-in;
+            animation-duration: 0.5s;
+        }
+
+        @keyframes fadeInOpacity {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 1;
+            }
+        }
     </style>
 
     <script>
-        $( document ).ready(function() {
+        let status = false;
+
+        $(document).ready(function() {
             init();
         });
 
         function validate() {
+            if (status) {
+                return;
+            }
+            status = true;
             swal("成功", "已完成使用者用藥功能開通", "success");
+            $('#validate').text('已開通');
+            $('#validate').prop('disabled', true);
+        }
+
+        function login() {
+            var account = $("#account").val();
+            var password = $("#password").val();
+
+            if (account != "admin" && password != "admin") {
+                swal("管理員登入失敗", "請重新確認輸入資訊", "error")
+                return;
+            }
+            $('#loginForm').css('display', 'none');
+            $('#validateForm').addClass('fade-in');
+            $('#validateForm').css('display', 'block');
         }
 
         function init() {
             var queryString = window.location.search;
             var urlParams = new URLSearchParams(queryString);
-            var product = urlParams.get('name');
-            $('#user').text(product);
+            var name = urlParams.get('n');
+            var base64Str = urlParams.get('i');
+            var decodeStr = atob(base64Str);
+            var infos = decodeStr.split(',');
+            $('#user').text(name);
+            $('#times').text(infos[0]);
+            $('#interval').text(infos[1]);
+            $('#pkgs').text(infos[2]);
         }
     </script>
 </head>
 
 <body>
-    <div onload="init()" class="container">
+    <div onload="init()" id="validateForm" class="container">
         <label for="patient-name" class="form-label">患者名稱：</label>
         <div id="user" class="col-12" style="border: 1px solid #ced4da; border-radius: 5px; min-height: 50px; padding: 10px; margin-bottom: 10px;">
         </div>
+        <label for="patient-times" class="form-label">用藥次數（日）：</label>
+        <div id="times" class="col-12" style="border: 1px solid #ced4da; border-radius: 5px; min-height: 50px; padding: 10px; margin-bottom: 10px;">
+        </div>
+        <label for="patient-times" class="form-label">用藥間隔（小時）：</label>
+        <div id="interval" class="col-12" style="border: 1px solid #ced4da; border-radius: 5px; min-height: 50px; padding: 10px; margin-bottom: 10px;">
+        </div>
+        <label for="patient-times" class="form-label">用藥藥包數：</label>
+        <div id="pkgs" class="col-12" style="border: 1px solid #ced4da; border-radius: 5px; min-height: 50px; padding: 10px; margin-bottom: 10px;">
+        </div>
         <button id="validate" onclick="validate()" type="button" class="btn btn-primary col-12">開 通</button>
+    </div>
+
+    <div id="loginForm" class="container" >
+        <label for="patient-name" class="form-label">帳號：</label>
+        <div class="col-12" style="border: 1px solid #FFFFFF; border-radius: 5px; min-height: 50px; padding: 10px; margin-bottom: 10px;">
+            <input type="text" id="account" class="form-control" placeholder="account" aria-label="Account"
+                aria-describedby="basic-addon1">
+        </div>
+        <label for="patient-times" class="form-label">密碼：</label>
+        <div id="times" class="col-12" style="border: 1px solid #FFFFFF; border-radius: 5px; min-height: 50px; padding: 10px; margin-bottom: 10px;">
+            <input type="password" id="password" class="form-control" placeholder="password" aria-label="Password"
+                aria-describedby="basic-addon1">
+        </div>
+        <button id="login" onclick="login()" type="button" class="btn btn-primary col-12">登 入</button>
     </div>
 </body>
 
