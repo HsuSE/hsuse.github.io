@@ -8,6 +8,7 @@
     <title>QRcode Generator</title>
 
     <script src="https://code.jquery.com/jquery-3.6.1.slim.js" integrity="sha256-tXm+sa1uzsbFnbXt8GJqsgi2Tw+m4BLGDof6eUPjbtk=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <!-- CSS only -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -109,29 +110,100 @@
 
     <script>
         let status = false;
+        let userUuid = "";
 
         $(document).ready(function() {
             init();
         });
 
-        function validate() {
-            const promise = new Promise((resolve, reject)=>{
-                setTimeout(() => {
-                    resolve('foo');
-                }, 1000);
+        function setUserValid(uuid, status)  {
+            var apiRoute = `https://service.yulon-motor.com.tw/medapi/appointment/user/update/${uuid}/valid/${status}`;
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: apiRoute,
+                    type: "PUT",
+                    crossDomain: true,
+                    headers: {
+                        "Accept": "application/json; charset=utf-8",
+                        "Authorization": "Bearer d1f99291-0xca-12ka-0293a01019293"
+                    },
+                    success: function(result) {
+                        if (result.result)
+                            resolve(result);
+                        reject(result);
+                    },
+                    error: function(error) {
+                        reject(error);
+                    }
+                })
             });
+        }
 
-            loading(true);
-            promise.then((value)=>{
-                loading(false);
-                if (status) {
-                    return;
-                }
-                status = true;
-                swal("成功", "已完成使用者用藥功能開通", "success");
-                $('#validate').text('已開通');
-                $('#validate').prop('disabled', true);
+        function getUserInfo(uuid) {
+            var apiRoute = `https://service.yulon-motor.com.tw/medapi/appointment/user/${uuid}`;
+            return new Promise((resolve, reject) => {
+                $.ajax({
+                    url: apiRoute,
+                    type: "GET",
+                    crossDomain: true,
+                    headers: {
+                        "Accept": "application/json; charset=utf-8",
+                        "Authorization": "Bearer d1f99291-0xca-12ka-0293a01019293"
+                    },
+                    success: function (result) {
+                        console.log(result);
+                        resolve(result);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        reject(error);
+                    }
+            })
             });
+        }
+
+        async function validate(uuid) {
+            loading(true);
+            const promise =
+                await setUserValid(uuid, 1)
+                    .then(result => {
+                        if (!result.result) {
+                            swal("失敗", "已使用者用藥功能開通失敗, 請聯繫系統管理員", "error");
+                            return;
+                        }
+                        status = true;
+                        swal("成功", "已完成使用者用藥功能開通", "success");
+                        setValidStatue(true);
+                    }).catch(err => {
+                        swal("失敗", "使用者用藥功能開通失敗, 請聯繫系統管理員", "error");
+                    }).finally(() => {
+                        loading(false);
+                    });
+        }
+
+        async function noValidate(uuid) {
+            loading(true);
+            const promise =
+                await setUserValid(uuid, 0)
+                    .then(result => {
+                        if (!result.result) {
+                            swal("失敗", "關閉使用者用藥功能開通失敗, 請聯繫系統管理員", "error");
+                            return;
+                        }
+                        status = true;
+                        swal("成功", "已關閉使用者用藥功能開通", "success");
+                        setValidStatue(false);
+                    }).catch(err => {
+                        swal("失敗", "關閉使用者用藥功能開通失敗, 請聯繫系統管理員", "error");
+                    }).finally(() => {
+                        loading(false);
+                    });
+        }
+
+        function setValidStatue(enable) {
+            $('#validate').text(enable ? '已開通' : '開通');
+            $('#validate').prop('disabled', enable);
+            $('#noValidate').css('display', !enable ? 'none' : 'block');
         }
 
         function login() {
@@ -161,9 +233,10 @@
             $('.loading').css('display', isLoading ? 'block' : 'none');
         }
 
-        function init() {
+        async function init() {
             var queryString = window.location.search;
             var urlParams = new URLSearchParams(queryString);
+            userUuid = urlParams.get('u');
             var name = urlParams.get('n');
             var base64Str = urlParams.get('i');
             var decodeStr = atob(base64Str);
@@ -172,6 +245,19 @@
             $('#times').text(infos[0]);
             $('#interval').text(infos[1]);
             $('#pkgs').text(infos[2]);
+
+            loading(true);
+            await getUserInfo(userUuid)
+                .then((result) => {
+                    console.log(result.is_valid);
+                    setValidStatue(result.is_valid);
+                })
+                .catch((error) => {
+                    setValidStatue(false);
+                })
+                .finally(() => {
+                    loading(false);
+                });
         }
     </script>
 </head>
@@ -195,7 +281,9 @@
         <label for="patient-times" class="form-label">用藥藥包數：</label>
         <div id="pkgs" class="col-12" style="border: 1px solid #ced4da; border-radius: 5px; min-height: 50px; padding: 10px; margin-bottom: 10px;">
         </div>
-        <button id="validate" onclick="validate()" type="button" class="btn btn-primary col-12">開 通</button>
+        <button id="validate" onclick="validate(userUuid)" type="button" class="btn btn-primary col-12">開 通</button>
+        <br/>
+        <button id="noValidate" onclick="noValidate(userUuid)" type="button" class="btn btn-primary col-12" style="background-color: white; border: none;">取消開通</button>
     </div>
 
     <div id="loginForm" class="container" >
