@@ -3,5 +3,5 @@
     "build": "4",
     "isAudit": false,
     "isEnforce": true,
-    "isCacheEnable": true
+    "isCacheEnable": false
 }
