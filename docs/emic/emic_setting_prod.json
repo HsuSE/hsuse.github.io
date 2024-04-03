@@ -1,7 +1,7 @@
 {
-    "version": "2.5.0",
-    "build": "3",
-    "isAudit": false,
+    "version": "2.5.1",
+    "build": "1",
+    "isAudit": true,
     "isEnforce": true,
     "isCacheEnable": true
 }
