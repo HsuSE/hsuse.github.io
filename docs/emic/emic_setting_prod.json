@@ -1,6 +1,6 @@
 {
-    "version": "2.6.10",
-    "build": "1",
+    "version": "2.6.12",
+    "build": "4",
     "isAudit": false,
     "isEnforce": true,
     "isCacheEnable": true
