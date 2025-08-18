@@ -1,7 +1,7 @@
 {
-    "version": "2.6.12",
-    "build": "4",
+    "version": "2.6.14",
+    "build": "2",
     "isAudit": false,
-    "isEnforce": true,
+    "isEnforce": false,
     "isCacheEnable": true
 }
